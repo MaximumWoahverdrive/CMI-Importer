@@ -1,0 +1,8 @@
+name: EssentialsX-CMI-Importer
+version: @version@
+main: io.github.essentialsx.cmiimporter.CMIImporter
+api-version: "1.13"
+loadbefore: [CMI, Essentials]
+provides: [CMI]
+authors: [md678685]
+description: Imports CMI data into EssentialsX

@@ -1,0 +1,52 @@
+/*
+ * Imports data from a CMI SQLite database into EssentialsX.
+ * Copyright (C) 2020 md678685
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
+package io.github.essentialsx.cmiimporter;
+
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.World;
+
+import java.util.HashMap;
+import java.util.Map;
+
+public class Util {
+
+    public static Map<String, String> parseMap(String input) {
+        HashMap<String, String> result = new HashMap<>();
+
+        for (String entry : input.split(";")) {
+            String[] split = entry.split("%%");
+            result.put(split[0], split[1]);
+        }
+
+        return result;
+    }
+
+    public static Location parseLocation(String input) {
+        String[] split = input.split(":");
+        World world = Bukkit.getWorld(split[0]);
+        double x = Double.parseDouble(split[1]);
+        double y = Double.parseDouble(split[2]);
+        double z = Double.parseDouble(split[3]);
+        float yaw = Float.parseFloat(split[5]);
+        float pitch = Float.parseFloat(split[4]);
+        return new Location(world, x, y, z, yaw, pitch);
+    }
+
+}
