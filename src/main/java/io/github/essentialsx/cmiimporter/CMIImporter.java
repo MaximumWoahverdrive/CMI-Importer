@@ -22,39 +22,22 @@ import co.aikar.idb.DB;
 import co.aikar.idb.DatabaseOptions;
 import co.aikar.idb.HikariPooledDatabase;
 import co.aikar.idb.PooledDatabaseOptions;
-import com.earth2me.essentials.Essentials;
-import com.google.common.collect.ImmutableMap;
+import io.github.essentialsx.cmiimporter.config.DatabaseConfig;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.server.PluginEnableEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.nio.file.Path;
-import java.util.Map;
-import java.util.function.Consumer;
-
 public final class CMIImporter extends JavaPlugin implements Listener {
 
-    private static final Map<String, Consumer<Essentials>> MIGRATIONS = ImmutableMap.<String, Consumer<Essentials>>builder()
-            .put("users", Migrations::migrateUsers)
-            .put("homes", Migrations::migrateHomes)
-            .put("nicknames", Migrations::migrateNicknames)
-            .put("warps", Migrations::migrateWarps)
-            .build();
+    private DatabaseConfig dbConfig;
 
     @Override
     public void onEnable() {
         getServer().getPluginManager().registerEvents(this, this);
 
-        Path cmiDatabaseLocation = getDataFolder().toPath().resolve("../CMI/cmi.sqlite.db");
-
-        DatabaseOptions options = DatabaseOptions.builder()
-                .poolName(getDescription().getName() + " DB")
-                .logger(getLogger())
-                .dataSourceClassName("org.sqlite.SQLiteDataSource")
-                .driverClassName("org.sqlite.JDBC")
-                .dsn(cmiDatabaseLocation.toString())
-                .build();
+        dbConfig = new DatabaseConfig(this);
+        DatabaseOptions options = dbConfig.getDbOptions();
         HikariPooledDatabase db = PooledDatabaseOptions.builder()
                 .options(options)
                 .createHikariDatabase();
@@ -70,15 +53,11 @@ public final class CMIImporter extends JavaPlugin implements Listener {
     @EventHandler
     public void onPluginEnable(PluginEnableEvent event) {
         if (event.getPlugin().getName().equals("Essentials")) {
-            runMigrations((Essentials) event.getPlugin());
+            Migrations.migrateAll(this, event.getPlugin());
         }
     }
 
-    private void runMigrations(Essentials ess) {
-        MIGRATIONS.forEach((name, migration) -> {
-            getLogger().info("Running migration for " + name);
-            migration.accept(ess);
-        });
+    DatabaseConfig getDbConfig() {
+        return dbConfig;
     }
-
 }

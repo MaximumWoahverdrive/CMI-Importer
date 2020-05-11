@@ -27,6 +27,7 @@ import net.ess3.nms.refl.ReflUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.plugin.Plugin;
 
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
@@ -39,11 +40,26 @@ public class Migrations {
 
     private static final Method SET_OFFLINE_PLAYER_NAME = ReflUtil.getMethodCached(OfflinePlayer.class, "setName", String.class);
 
+    private static String prefix;
+
+    static void migrateAll(CMIImporter importerPlugin, Plugin essPlugin) {
+        if (!(essPlugin instanceof Essentials)) {
+            throw new IllegalArgumentException("The currently installed \"Essentials\" plugin isn't actually EssentialsX!");
+        }
+
+        Essentials ess = (Essentials) essPlugin;
+        prefix = importerPlugin.getDbConfig().getTablePrefix();
+        migrateUsers(ess);
+        migrateHomes(ess);
+        migrateNicknames(ess);
+        migrateWarps(ess);
+    }
+
     static void migrateUsers(Essentials ess) {
         try {
             SET_OFFLINE_PLAYER_NAME.setAccessible(true);
 
-            List<DbRow> results = DB.getResults("SELECT (player_uuid, username, FakeAccount) FROM users WHERE (player_uuid NOT NULL AND username NOT NULL)");
+            List<DbRow> results = DB.getResults("SELECT (player_uuid, username, FakeAccount) FROM" + table("users") + " WHERE (player_uuid NOT NULL AND username NOT NULL)");
             for (DbRow row : results) {
                 UUID uuid = UUID.fromString(row.getString("player_uuid"));
                 String username = row.getString("username");
@@ -69,7 +85,7 @@ public class Migrations {
     static void migrateHomes(Essentials ess) {
         final String homeLocSeparator = ":";
         try {
-            List<DbRow> results = DB.getResults("SELECT (player_uuid, Homes)");
+            List<DbRow> results = DB.getResults("SELECT (player_uuid, Homes) FROM " + table("users"));
             for (DbRow row : results) {
                 UUID uuid = UUID.fromString(row.getString("player_uuid"));
                 User user = ess.getUser(uuid);
@@ -83,7 +99,7 @@ public class Migrations {
 
     static void migrateNicknames(Essentials ess) {
         try {
-            List<DbRow> results = DB.getResults("SELECT (player_uuid, nickname)");
+            List<DbRow> results = DB.getResults("SELECT (player_uuid, nickname) FROM " + table("users"));
             for (DbRow row : results) {
                 UUID uuid = UUID.fromString(row.getString("player_uuid"));
                 User user = ess.getUser(uuid);
@@ -112,6 +128,10 @@ public class Migrations {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private static String table(String table) {
+        return prefix + table;
     }
 
 }
