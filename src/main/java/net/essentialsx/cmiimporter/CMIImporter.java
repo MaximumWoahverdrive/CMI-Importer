@@ -16,13 +16,13 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package io.github.essentialsx.cmiimporter;
+package net.essentialsx.cmiimporter;
 
 import co.aikar.idb.DB;
 import co.aikar.idb.DatabaseOptions;
 import co.aikar.idb.HikariPooledDatabase;
 import co.aikar.idb.PooledDatabaseOptions;
-import io.github.essentialsx.cmiimporter.config.DatabaseConfig;
+import net.essentialsx.cmiimporter.config.DatabaseConfig;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.server.PluginEnableEvent;

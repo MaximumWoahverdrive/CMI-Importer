@@ -16,10 +16,10 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package io.github.essentialsx.cmiimporter.config;
+package net.essentialsx.cmiimporter.config;
 
 import co.aikar.idb.DatabaseOptions;
-import io.github.essentialsx.cmiimporter.CMIImporter;
+import net.essentialsx.cmiimporter.CMIImporter;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;

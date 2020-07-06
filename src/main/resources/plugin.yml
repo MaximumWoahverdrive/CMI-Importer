@@ -1,6 +1,6 @@
 name: EssentialsX-CMI-Importer
 version: @version@
-main: io.github.essentialsx.cmiimporter.CMIImporter
+main: CMIImporter
 api-version: "1.13"
 loadbefore: [CMI, Essentials]
 provides: [CMI]

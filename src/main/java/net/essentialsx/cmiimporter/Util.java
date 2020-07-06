@@ -16,7 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package io.github.essentialsx.cmiimporter;
+package net.essentialsx.cmiimporter;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
