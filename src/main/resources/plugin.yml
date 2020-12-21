@@ -2,8 +2,9 @@ name: EssentialsX-CMI-Importer
 version: @version@
 main: net.essentialsx.cmiimporter.CMIImporter
 api-version: "1.13"
-softdepend: [Multiverse-Core]
-loadbefore: [CMI, Essentials]
-provides: [CMI]
-authors: [md678685]
+depend: [Essentials]
+authors: [mdcfe]
 description: Imports CMI data into EssentialsX
+commands:
+  cmi-import:
+    description: "Controls CMI data migration"

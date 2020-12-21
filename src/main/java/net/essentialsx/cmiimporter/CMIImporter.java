@@ -22,27 +22,32 @@ import co.aikar.idb.DB;
 import co.aikar.idb.DatabaseOptions;
 import co.aikar.idb.HikariPooledDatabase;
 import co.aikar.idb.PooledDatabaseOptions;
+import com.earth2me.essentials.Essentials;
 import net.essentialsx.cmiimporter.config.DatabaseConfig;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-import org.bukkit.event.server.PluginEnableEvent;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
-public final class CMIImporter extends JavaPlugin implements Listener {
+public final class CMIImporter extends JavaPlugin {
 
     private DatabaseConfig dbConfig;
+    private Migrations migrations;
 
     @Override
     public void onEnable() {
-        getServer().getPluginManager().registerEvents(this, this);
+        getServer().getPluginCommand("cmi-import").setExecutor(new ImportCommand(this));
 
         dbConfig = new DatabaseConfig(this);
         DatabaseOptions options = dbConfig.getDbOptions();
         HikariPooledDatabase db = PooledDatabaseOptions.builder()
                 .options(options)
                 .createHikariDatabase();
-
         DB.setGlobalDatabase(db);
+
+        Plugin plugin = getServer().getPluginManager().getPlugin("Essentials");
+        if (!(plugin instanceof Essentials)) {
+            throw new IllegalArgumentException("The currently installed \"Essentials\" plugin isn't actually EssentialsX!");
+        }
+        migrations = new Migrations(this, (Essentials) plugin);
     }
 
     @Override
@@ -50,14 +55,11 @@ public final class CMIImporter extends JavaPlugin implements Listener {
         DB.close();
     }
 
-    @EventHandler
-    public void onPluginEnable(PluginEnableEvent event) {
-        if (event.getPlugin().getName().equals("Essentials")) {
-            Migrations.migrateAll(this, event.getPlugin());
-        }
+    public DatabaseConfig getDbConfig() {
+        return dbConfig;
     }
 
-    DatabaseConfig getDbConfig() {
-        return dbConfig;
+    public Migrations getMigrations() {
+        return migrations;
     }
 }

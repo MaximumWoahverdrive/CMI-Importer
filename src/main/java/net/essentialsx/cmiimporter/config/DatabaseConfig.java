@@ -27,22 +27,27 @@ import java.io.File;
 public class DatabaseConfig {
 
     private final CMIImporter plugin;
+
+    private final String backend;
     private final String hostname;
     private final String username;
     private final String password;
     private final String database;
-    private final String backend;
     private final String prefix;
 
     public DatabaseConfig(CMIImporter plugin) {
         this.plugin = plugin;
 
+        if (!plugin.getDataFolder().exists()) {
+            plugin.getDataFolder().mkdirs();
+        }
+
         YamlConfiguration config = YamlConfiguration.loadConfiguration(new File(plugin.getDataFolder(), "../CMI/dataBaseInfo.yml"));
+        backend = config.getString("storage.method");
         hostname = config.getString("mysql.hostname", "localhost:3306");
         username = config.getString("mysql.username", "root");
         password = config.getString("mysql.password", "");
         database = config.getString("mysql.database", "minecraft");
-        backend = config.getString("storage.method");
         prefix = config.getString("mysql.tablePrefix", "CMI_");
     }
 
@@ -67,8 +72,12 @@ public class DatabaseConfig {
         return builder.mysql(username, password, database, hostname).build();
     }
 
+    public String getBackend() {
+        return backend;
+    }
+
     public String getTablePrefix() {
-        if (backend.equalsIgnoreCase("mysql")) {
+        if (backend != null && backend.equalsIgnoreCase("mysql")) {
             return prefix;
         }
 
