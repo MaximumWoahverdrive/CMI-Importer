@@ -29,7 +29,7 @@ repositories {
 dependencies {
     compileOnly 'org.spigotmc:spigot-api:1.16.1-R0.1-SNAPSHOT'
 
-    compileOnly 'net.ess3:EssentialsX:2.18.2'
+    compileOnly 'net.essentialsx:EssentialsX:2.19.0-SNAPSHOT'
 
     implementation 'co.aikar:idb-core:1.0.0-SNAPSHOT'
     implementation 'com.zaxxer:HikariCP:2.4.1'
@@ -49,8 +49,8 @@ processResources {
 
 shadowJar {
     minimize()
-    relocate 'co.aikar.idb', 'net.essentialsx.cmiimporter.idb'
-    relocate 'com.zaxxer.hikari', 'net.essentialsx.cmiimporter.hikari'
+    relocate 'co.aikar.idb', 'net.essentialsx.cmiimporter.dep.idb'
+    relocate 'com.zaxxer.hikari', 'net.essentialsx.cmiimporter.dep.hikari'
 }
 
 build.dependsOn shadowJar

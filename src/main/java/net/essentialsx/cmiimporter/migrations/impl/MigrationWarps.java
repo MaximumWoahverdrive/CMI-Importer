@@ -1,17 +1,18 @@
-package net.essentialsx.cmiimporter.migrations;
+package net.essentialsx.cmiimporter.migrations.impl;
 
 import com.earth2me.essentials.Essentials;
 import net.essentialsx.cmiimporter.CMIImporter;
 import net.essentialsx.cmiimporter.Util;
+import net.essentialsx.cmiimporter.migrations.AbstractMigration;
 import org.bukkit.Location;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
 
-public class MigrationWarps extends Migration {
+public class MigrationWarps extends AbstractMigration {
 
-    public MigrationWarps(CMIImporter importer, Essentials essentials, boolean requiresUsers) {
-        super(importer, essentials, requiresUsers);
+    public MigrationWarps(CMIImporter importer, Essentials essentials) {
+        super(importer, essentials, "Warps", "Imports warp data.", false);
     }
 
     @Override

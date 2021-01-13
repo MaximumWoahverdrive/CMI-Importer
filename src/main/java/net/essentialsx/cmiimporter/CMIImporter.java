@@ -34,9 +34,7 @@ public final class CMIImporter extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        getServer().getPluginCommand("cmi-import").setExecutor(new ImportCommand(this));
-
-        dbConfig = new DatabaseConfig(this);
+        this.dbConfig = new DatabaseConfig(this);
         DatabaseOptions options = dbConfig.getDbOptions();
         HikariPooledDatabase db = PooledDatabaseOptions.builder()
                 .options(options)
@@ -47,7 +45,9 @@ public final class CMIImporter extends JavaPlugin {
         if (!(plugin instanceof Essentials)) {
             throw new IllegalArgumentException("The currently installed \"Essentials\" plugin isn't actually EssentialsX!");
         }
-        migrations = new Migrations(this, (Essentials) plugin);
+        this.migrations = new Migrations(this, (Essentials) plugin);
+
+        getServer().getPluginCommand("cmi-import").setExecutor(new ImportCommand(this));
     }
 
     @Override
@@ -62,4 +62,5 @@ public final class CMIImporter extends JavaPlugin {
     public Migrations getMigrations() {
         return migrations;
     }
+
 }
