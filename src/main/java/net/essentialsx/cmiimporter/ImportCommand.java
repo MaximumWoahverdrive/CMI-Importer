@@ -16,35 +16,39 @@ public class ImportCommand implements CommandExecutor {
 
     public ImportCommand(CMIImporter plugin) {
         this.plugin = plugin;
-        this.availableMessage = String.format("&7Available migrations: %s", String.join(", ", plugin.getMigrations().getAvailable()));
+        this.availableMessage = String.format("&7Available migrations: %s", String.join(", ", plugin.getMigrations().getKeys()));
     }
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 
-        // should this only be run from console?
+        if (!sender.hasPermission("cmiimporter.use")) {
+            reply(sender, "&cYou don't have permission!");
+            return true;
+        }
 
         if (args.length == 0) {
             reply(sender, availableMessage);
             return true;
         }
 
-        // maybe we can also have an "all" argument that runs every migration
-
-        Set<String> available = plugin.getMigrations().getAvailable();
-        for (String arg : args) {
-            if (!available.contains(arg.toLowerCase())) {
-                reply(sender, String.format("&cInvalid migration: \"%s\"", arg));
-                reply(sender, availableMessage);
-                return true;
+        List<Migration> migrations;
+        if (args.length == 1 && args[0].equalsIgnoreCase("all")) {
+            migrations = plugin.getMigrations().getAllMigrations();
+        } else {
+            Set<String> available = plugin.getMigrations().getKeys();
+            for (String arg : args) {
+                if (!available.contains(arg.toLowerCase())) {
+                    reply(sender, String.format("&cInvalid migration: \"%s\"", arg));
+                    reply(sender, availableMessage);
+                    return true;
+                }
             }
+            migrations = plugin.getMigrations().getApplicableMigrations(args);
         }
 
         reply(sender, "&7Migrating data, please wait...");
-
-        List<Migration> migrations = plugin.getMigrations().getApplicable(args);
         migrations.forEach(Migration::run);
-
         reply(sender, "&aMigration complete.");
 
         return true;

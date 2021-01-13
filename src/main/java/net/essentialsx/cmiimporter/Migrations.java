@@ -55,7 +55,7 @@ public class Migrations {
                 .build();
     }
 
-    public List<Migration> getApplicable(String[] args) {
+    public List<Migration> getApplicableMigrations(String[] args) {
         List<Migration> migrations = new ArrayList<>();
         for (String arg : args) {
             migrations.add(migrationMap.get(arg.toLowerCase()));
@@ -72,7 +72,13 @@ public class Migrations {
         return migrations;
     }
 
-    public Set<String> getAvailable() {
+    public List<Migration> getAllMigrations() {
+        List<Migration> migrations = new ArrayList<>(migrationMap.values());
+        migrations.add(0, userMigration);
+        return migrations;
+    }
+
+    public Set<String> getKeys() {
         return migrationMap.keySet();
     }
 
