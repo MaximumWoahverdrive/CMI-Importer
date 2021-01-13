@@ -18,6 +18,7 @@
 
 package net.essentialsx.cmiimporter;
 
+import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -32,6 +33,9 @@ public class Util {
 
     public static Map<String, String> parseMap(String input) {
         HashMap<String, String> result = new HashMap<>();
+        if (StringUtils.isBlank(input)) {
+            return result;
+        }
 
         for (String entry : input.split(";")) {
             String[] split = entry.split("%%");
