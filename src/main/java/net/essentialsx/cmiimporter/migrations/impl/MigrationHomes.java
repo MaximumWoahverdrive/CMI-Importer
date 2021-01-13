@@ -15,13 +15,14 @@ import java.util.UUID;
 
 public class MigrationHomes extends AbstractMigration {
 
+    private static final String HOME_LOC_SEPARATOR = ":";
+
     public MigrationHomes(CMIImporter importer, Essentials essentials) {
         super(importer, essentials, "Homes", "Imports user home data.", true);
     }
 
     @Override
     public void run() {
-        final String homeLocSeparator = ":";
         try {
             List<DbRow> results = DB.getResults("SELECT player_uuid, Homes FROM " + table("users") + " WHERE player_uuid IS NOT NULL AND Homes IS NOT NULL");
             for (DbRow row : results) {
@@ -35,7 +36,7 @@ public class MigrationHomes extends AbstractMigration {
                     String name = entry.getKey();
                     String loc = entry.getValue();
                     try {
-                        user.setHome(name, Util.parseLocation(loc, homeLocSeparator, true));
+                        user.setHome(name, Util.parseLocation(loc, HOME_LOC_SEPARATOR, true));
                     } catch (Exception ex) {
                         logWarning(String.format("Unable to migrate home \"%s\" for %s!", name, user.getName()));
                     }

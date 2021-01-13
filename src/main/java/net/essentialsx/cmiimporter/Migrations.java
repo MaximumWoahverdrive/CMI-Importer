@@ -25,6 +25,7 @@ import net.essentialsx.cmiimporter.migrations.impl.MigrationEconomy;
 import net.essentialsx.cmiimporter.migrations.impl.MigrationHomes;
 import net.essentialsx.cmiimporter.migrations.impl.MigrationLastLogin;
 import net.essentialsx.cmiimporter.migrations.impl.MigrationLastLogout;
+import net.essentialsx.cmiimporter.migrations.impl.MigrationLogoutLocation;
 import net.essentialsx.cmiimporter.migrations.impl.MigrationMail;
 import net.essentialsx.cmiimporter.migrations.impl.MigrationNicknames;
 import net.essentialsx.cmiimporter.migrations.impl.MigrationUsers;
@@ -47,6 +48,7 @@ public class Migrations {
                 .put("homes", new MigrationHomes(importer, essentials))
                 .put("lastlogin", new MigrationLastLogin(importer, essentials))
                 .put("lastlogout", new MigrationLastLogout(importer, essentials))
+                .put("logoutlocation", new MigrationLogoutLocation(importer, essentials))
                 .put("mail", new MigrationMail(importer, essentials))
                 .put("nicknames", new MigrationNicknames(importer, essentials))
                 .put("warps", new MigrationWarps(importer, essentials))

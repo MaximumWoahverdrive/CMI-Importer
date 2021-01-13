@@ -14,7 +14,7 @@ import java.util.UUID;
 public class MigrationLastLogout extends AbstractMigration {
 
     public MigrationLastLogout(CMIImporter importer, Essentials essentials) {
-        super(importer, essentials, "Last Logout", "Imports user last logout data.", true);
+        super(importer, essentials, "Last Logout Time", "Imports user last logout data.", true);
     }
 
     @Override

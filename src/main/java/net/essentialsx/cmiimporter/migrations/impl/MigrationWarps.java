@@ -11,20 +11,21 @@ import java.io.File;
 
 public class MigrationWarps extends AbstractMigration {
 
+    private static final String WARP_LOC_SEPARATOR = ":";
+
     public MigrationWarps(CMIImporter importer, Essentials essentials) {
         super(importer, essentials, "Warps", "Imports warp data.", false);
     }
 
     @Override
     public void run() {
-        final String warpLocSeparator = ";";
         try {
             File warpsFile = new File(essentials.getDataFolder(), "../CMI/warps.yml");
             YamlConfiguration warpsConfig = YamlConfiguration.loadConfiguration(warpsFile);
             for (String key : warpsConfig.getKeys(false)) {
                 String locString = warpsConfig.getString(key + ".Location");
                 if (locString != null) {
-                    Location loc = Util.parseLocation(locString, warpLocSeparator, false);
+                    Location loc = Util.parseLocation(locString, WARP_LOC_SEPARATOR, false);
                     try {
                         essentials.getWarps().setWarp(null, key, loc);
                     } catch (Exception ex) {
