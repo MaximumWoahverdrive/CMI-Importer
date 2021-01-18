@@ -3,13 +3,14 @@ package net.essentialsx.cmiimporter;
 import net.essentialsx.cmiimporter.migrations.Migration;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabExecutor;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
-public class ImportCommand implements CommandExecutor {
+public class ImportCommand implements TabExecutor {
 
     private final CMIImporter plugin;
     private final String availableMessage;
@@ -21,7 +22,6 @@ public class ImportCommand implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-
         if (!sender.hasPermission("cmiimporter.use")) {
             reply(sender, "&cYou don't have permission!");
             return true;
@@ -52,6 +52,12 @@ public class ImportCommand implements CommandExecutor {
         reply(sender, "&aMigration complete.");
 
         return true;
+    }
+
+    // todo: tabcomplete
+    @Override
+    public List<String> onTabComplete(CommandSender commandSender, Command command, String s, String[] strings) {
+        return Collections.emptyList();
     }
 
     private void reply(CommandSender sender, String message) {

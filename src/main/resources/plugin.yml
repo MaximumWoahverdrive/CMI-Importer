@@ -7,4 +7,5 @@ authors: [mdcfe]
 description: Imports CMI data into EssentialsX
 commands:
   cmi-import:
-    description: "Controls CMI data migration"
+    description: "Controls CMI data migration."
+    usage: "/cmi-import (all|<migrations...>)"

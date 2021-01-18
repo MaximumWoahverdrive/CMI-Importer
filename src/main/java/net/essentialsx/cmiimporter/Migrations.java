@@ -58,16 +58,16 @@ public class Migrations {
     public List<Migration> getApplicableMigrations(String[] args) {
         List<Migration> migrations = new ArrayList<>();
         for (String arg : args) {
-            migrations.add(migrationMap.get(arg.toLowerCase()));
+            Migration migration = migrationMap.get(arg.toLowerCase());
+            if (migration != null) {
+                migrations.add(migration);
+            }
         }
 
         // if there are any user-dependent migrations, migrate user data first
         if (migrations.stream().anyMatch(Migration::isUserDependent)) {
             migrations.add(0, userMigration);
         }
-
-        // there should probably also be checks somewhere (here?) for previously
-        // migrated data (need log file) to ensure that users don't migrate data again ??
 
         return migrations;
     }

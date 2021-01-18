@@ -64,7 +64,7 @@ public class DatabaseConfig {
     }
 
     private DatabaseOptions getSQLiteOptions(DatabaseOptions.DatabaseOptionsBuilder builder) {
-        File sqliteFile = new File(plugin.getDataFolder(), "../CMI/cmi.sqlite.db");
+        File sqliteFile = new File(plugin.getDataFolder().getParent(), "CMI/cmi.sqlite.db");
         return builder.sqlite(sqliteFile.getPath()).build();
     }
 
