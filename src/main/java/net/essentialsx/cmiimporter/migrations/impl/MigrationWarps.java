@@ -11,7 +11,7 @@ import java.io.File;
 
 public class MigrationWarps extends AbstractMigration {
 
-    private static final String WARP_LOC_SEPARATOR = ":";
+    private static final String WARP_LOC_SEPARATOR = ";";
 
     public MigrationWarps(CMIImporter importer, Essentials essentials) {
         super(importer, essentials, "Warps", "Imports warp data.", false);
