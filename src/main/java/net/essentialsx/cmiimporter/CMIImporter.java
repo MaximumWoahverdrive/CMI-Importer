@@ -41,13 +41,13 @@ public final class CMIImporter extends JavaPlugin {
                 .createHikariDatabase();
         DB.setGlobalDatabase(db);
 
-        Plugin plugin = getServer().getPluginManager().getPlugin("Essentials");
+        Plugin plugin = this.getServer().getPluginManager().getPlugin("Essentials");
         if (!(plugin instanceof Essentials)) {
             throw new IllegalArgumentException("The currently installed \"Essentials\" plugin isn't actually EssentialsX!");
         }
         this.migrations = new Migrations(this, (Essentials) plugin);
 
-        getServer().getPluginCommand("cmi-import").setExecutor(new ImportCommand(this));
+        this.getServer().getPluginCommand("cmi-import").setExecutor(new ImportCommand(this));
     }
 
     @Override

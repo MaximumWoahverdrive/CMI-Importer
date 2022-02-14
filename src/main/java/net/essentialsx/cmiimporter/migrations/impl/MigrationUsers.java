@@ -6,6 +6,7 @@ import com.earth2me.essentials.Essentials;
 import com.earth2me.essentials.OfflinePlayer;
 import com.earth2me.essentials.User;
 import net.essentialsx.cmiimporter.CMIImporter;
+import net.essentialsx.cmiimporter.ImporterOfflinePlayer;
 import net.essentialsx.cmiimporter.migrations.AbstractMigration;
 import org.bukkit.Bukkit;
 
@@ -28,10 +29,7 @@ public class MigrationUsers extends AbstractMigration {
                 String username = row.getString("username");
                 boolean isNpc = getBooleanFromNumeric(row, "FakeAccount");
                 if (!essentials.getUserMap().userExists(uuid)) {
-                    OfflinePlayer player = new OfflinePlayer(uuid, Bukkit.getServer());
-                    // this depends on com.earth2me.essentials.OfflinePlayer#setName being made public
-                    player.setName(username);
-
+                    ImporterOfflinePlayer player = new ImporterOfflinePlayer(username, uuid, Bukkit.getServer());
                     User user = new User(player, essentials);
                     user.setLastAccountName(username);
                     if (isNpc) {
