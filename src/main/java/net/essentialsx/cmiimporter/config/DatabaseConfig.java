@@ -42,7 +42,7 @@ public class DatabaseConfig {
             plugin.getDataFolder().mkdirs();
         }
 
-        YamlConfiguration config = YamlConfiguration.loadConfiguration(new File(plugin.getDataFolder().getParent(), "CMI/Settings/databasenfo.yml"));
+        YamlConfiguration config = YamlConfiguration.loadConfiguration(new File(plugin.getDataFolder().getParent(), "CMI/Settings/DataBaseInfo.yml"));
         backend = config.getString("storage.method");
         hostname = config.getString("mysql.hostname", "localhost:3306");
         username = config.getString("mysql.username", "root");
