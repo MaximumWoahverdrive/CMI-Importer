@@ -18,10 +18,7 @@
 
 package net.essentialsx.cmiimporter;
 
-import co.aikar.idb.DB;
-import co.aikar.idb.DatabaseOptions;
-import co.aikar.idb.HikariPooledDatabase;
-import co.aikar.idb.PooledDatabaseOptions;
+import co.aikar.idb.*;
 import com.earth2me.essentials.Essentials;
 import net.essentialsx.cmiimporter.config.DatabaseConfig;
 import org.bukkit.plugin.Plugin;
