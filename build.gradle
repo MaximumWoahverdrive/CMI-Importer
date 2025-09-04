@@ -44,6 +44,7 @@ import org.apache.tools.ant.filters.ReplaceTokens
 
 processResources {
     from(sourceSets.main.resources.srcDirs) {
+        duplicatesStrategy = DuplicatesStrategy.INCLUDE
         filter ReplaceTokens, tokens: [version: version]
     }
 }
