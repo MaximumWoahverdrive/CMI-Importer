@@ -1,7 +1,7 @@
 name: EssentialsX-CMI-Importer
 version: @version@
 main: net.essentialsx.cmiimporter.CMIImporter
-api-version: "1.13"
+api-version: "1.21"
 depend: [Essentials]
 authors: [mdcfe]
 description: Imports CMI data into EssentialsX
