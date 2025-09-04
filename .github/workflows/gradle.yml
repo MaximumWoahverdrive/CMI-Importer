@@ -13,6 +13,9 @@ jobs:
   build:
 
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      packages: write
 
     steps:
       - uses: actions/checkout@v4
@@ -35,3 +38,35 @@ jobs:
           name: CMI-Importer
           # A file, directory or wildcard pattern that describes what to upload
           path: build/libs/CMI-Importer-*-all.jar
+
+
+      - name: Get JAR info for release
+        id: jar_info
+        if: github.ref_type == 'tag'
+        run: |
+          JAR_FILE=$(find build/libs -name "CMI-Importer-*-all.jar" | head -1)
+          JAR_NAME=$(basename "$JAR_FILE")
+          FILE_SIZE=$(stat -c%s "$JAR_FILE" | numfmt --to=iec)
+          echo "jar_file=$JAR_FILE" >> $GITHUB_OUTPUT
+          echo "jar_name=$JAR_NAME" >> $GITHUB_OUTPUT
+          echo "file_size=$FILE_SIZE" >> $GITHUB_OUTPUT
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        if: github.ref_type == 'tag'
+        with:
+          name: "CMI-Importer ${{ github.ref_name }}"
+          body: |
+            ## CMI-Importer ${{ github.ref_name }}
+            
+            **Download:** [${{ steps.jar_info.outputs.jar_name }}](${{ github.server_url }}/${{ github.repository }}/releases/download/${{ github.ref_name }}/${{ steps.jar_info.outputs.jar_name }})
+            
+            **File Size:** ${{ steps.jar_info.outputs.file_size }}
+            
+            ---
+            
+            Built automatically from commit ${{ github.sha }}
+          files: ${{ steps.jar_info.outputs.jar_file }}
+          draft: true
+          prerelease: false
+          generate_release_notes: true
