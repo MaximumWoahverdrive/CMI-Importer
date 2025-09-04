@@ -12,7 +12,7 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.UUID;
 
-import static com.earth2me.essentials.I18n.tl;
+import static com.earth2me.essentials.I18n.tlLiteral;
 
 public class MigrationMail extends AbstractMigration {
 
@@ -36,13 +36,12 @@ public class MigrationMail extends AbstractMigration {
                     String sender = mail.get(0);
                     // CMI replaces ";" with "T7C" and ":" with "T8C" when storing message contents
                     String content = mail.get(2).replace("T7C", ";").replace("T8C", ":");
-                    String mailFormat = tl("mailFormat", sender, content);
-                    user.addMail(tl("mailMessage", mailFormat));
+                    String mailFormat = tlLiteral("mailFormat", sender, content);
+                    user.addMail(tlLiteral("mailMessage", mailFormat));
                 }
             }
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
     }
-
 }

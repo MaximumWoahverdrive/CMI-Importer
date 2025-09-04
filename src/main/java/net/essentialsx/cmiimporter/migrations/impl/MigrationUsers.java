@@ -3,7 +3,6 @@ package net.essentialsx.cmiimporter.migrations.impl;
 import co.aikar.idb.DB;
 import co.aikar.idb.DbRow;
 import com.earth2me.essentials.Essentials;
-import com.earth2me.essentials.OfflinePlayer;
 import com.earth2me.essentials.User;
 import net.essentialsx.cmiimporter.CMIImporter;
 import net.essentialsx.cmiimporter.ImporterOfflinePlayer;
@@ -28,7 +27,7 @@ public class MigrationUsers extends AbstractMigration {
                 UUID uuid = UUID.fromString(row.getString("player_uuid"));
                 String username = row.getString("username");
                 boolean isNpc = getBooleanFromNumeric(row, "FakeAccount");
-                if (!essentials.getUserMap().userExists(uuid)) {
+                if (essentials.getUser(uuid) == null) {
                     ImporterOfflinePlayer player = new ImporterOfflinePlayer(username, uuid, Bukkit.getServer());
                     User user = new User(player, essentials);
                     user.setLastAccountName(username);
