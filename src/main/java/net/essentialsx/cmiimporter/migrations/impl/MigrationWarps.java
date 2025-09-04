@@ -20,7 +20,7 @@ public class MigrationWarps extends AbstractMigration {
     @Override
     public void run() {
         try {
-            File warpsFile = new File(essentials.getDataFolder(), "../CMI/warps.yml");
+            File warpsFile = new File(essentials.getDataFolder(), "../CMI/Saves/Warps.yml");
             YamlConfiguration warpsConfig = YamlConfiguration.loadConfiguration(warpsFile);
             for (String key : warpsConfig.getKeys(false)) {
                 String locString = warpsConfig.getString(key + ".Location");
