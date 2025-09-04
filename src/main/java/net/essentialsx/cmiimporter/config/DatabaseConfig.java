@@ -57,7 +57,11 @@ public class DatabaseConfig {
                 .logger(plugin.getLogger());
 
         if (backend != null && backend.equalsIgnoreCase("mysql")) {
-            return getMySQLOptions(builder);
+            DatabaseOptions options = getMySQLOptions(builder);
+            if(options.getDataSourceClassName().equalsIgnoreCase("org.mariadb.jdbc.MariaDbDataSource")) {
+                options.setDsn("mariadb://" + hostname + "/" + database);
+            }
+            return options;
         } else {
             return getSQLiteOptions(builder);
         }
@@ -80,8 +84,6 @@ public class DatabaseConfig {
         if (backend != null && backend.equalsIgnoreCase("mysql")) {
             return prefix;
         }
-
         return "";
     }
-
 }
