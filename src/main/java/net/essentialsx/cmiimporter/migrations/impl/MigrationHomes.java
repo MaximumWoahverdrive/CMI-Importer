@@ -7,6 +7,7 @@ import com.earth2me.essentials.User;
 import net.essentialsx.cmiimporter.CMIImporter;
 import net.essentialsx.cmiimporter.Util;
 import net.essentialsx.cmiimporter.migrations.AbstractMigration;
+import org.bukkit.Location;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -14,8 +15,6 @@ import java.util.Map;
 import java.util.UUID;
 
 public class MigrationHomes extends AbstractMigration {
-
-    private static final String HOME_LOC_SEPARATOR = ":";
 
     public MigrationHomes(CMIImporter importer, Essentials essentials) {
         super(importer, essentials, "Homes", "Imports user home data.", true);
@@ -32,11 +31,11 @@ public class MigrationHomes extends AbstractMigration {
                     logWarning(String.format("Unable to migrate homes data for UUID %s!", uuid));
                     continue;
                 }
-                for (Map.Entry<String, String> entry : Util.parseMap(row.getString("Homes")).entrySet()) {
+                for (Map.Entry<String, Location> entry : Util.parseHomes(row.getString("Homes")).entrySet()) {
                     String name = entry.getKey();
-                    String loc = entry.getValue();
+                    Location loc = entry.getValue();
                     try {
-                        user.setHome(name, Util.parseLocation(loc, HOME_LOC_SEPARATOR, true));
+                        user.setHome(name, loc);
                     } catch (Exception ex) {
                         logWarning(String.format("Unable to migrate home \"%s\" for %s!", name, user.getName()));
                     }

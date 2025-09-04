@@ -18,28 +18,42 @@
 
 package net.essentialsx.cmiimporter;
 
-import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+
 
 public class Util {
 
-    public static Map<String, String> parseMap(String input) {
-        HashMap<String, String> result = new HashMap<>();
-        if (StringUtils.isBlank(input)) {
-            return result;
-        }
+    private static final String HOME_LOC_SEPARATOR = ":";
 
-        for (String entry : input.split(";")) {
-            String[] split = entry.split("%%");
-            result.put(split[0], split[1]);
+    public static Map<String, Location> parseHomes(String input) {
+        Map<String, Location> result = new LinkedHashMap<>();
+
+        // crude JSON parsing: split on ":", "{", "}", etc.
+        // Assumes input is well-formed (your case)
+        String json = input.trim();
+        if (json.startsWith("{")) json = json.substring(1);
+        if (json.endsWith("}")) json = json.substring(0, json.length()-1);
+
+        // split top-level entries by "],"
+        String[] entries = json.split("],");
+        for (String entry : entries) {
+            entry = entry.trim();
+            if (entry.endsWith("]")) entry = entry.substring(0, entry.length()-1);
+
+            String[] keyValue = entry.split(":", 2);
+            String key = keyValue[0].trim().replaceAll("^\"|\"$", ""); // remove quotes
+
+            // value part looks like ["world:..."]
+            String valuePart = keyValue[1].trim();
+            int start = valuePart.indexOf("\"");
+            int end = valuePart.indexOf("\"", start+1);
+            String locStr = valuePart.substring(start+1, end);
+
+            result.put(key, parseLocation(locStr, HOME_LOC_SEPARATOR, true));
         }
 
         return result;
